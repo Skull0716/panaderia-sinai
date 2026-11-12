@@ -1,56 +1,78 @@
 "use client";
 
 import { useRef, type MouseEvent, type ReactNode } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "motion/react";
 
 type MagneticButtonProps = {
   href: string;
   className?: string;
   children: ReactNode;
-  /** Cuánto se desplaza el botón hacia el cursor (0–1). */
   strength?: number;
+  external?: boolean;
 };
 
 /**
- * Botón magnético: sigue suavemente el cursor con física de resorte.
- * El elemento hijo interno compensa el desplazamiento para que el
- * contenido se mantenga estable mientras la superficie se imanta.
+ * Botón magnético de doble capa (estilo Motionframe / Ubernatural):
+ * la superficie sigue al cursor con resorte físico y el texto interior
+ * acompaña con un paralaje sutil para dar sensación de volumen real.
  */
 export default function MagneticButton({
   href,
   className,
   children,
-  strength = 0.35,
+  strength = 0.32,
+  external = false,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLAnchorElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 180, damping: 14, mass: 0.1 });
-  const sy = useSpring(y, { stiffness: 180, damping: 14, mass: 0.1 });
+  const reduced = useReducedMotion();
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+
+  const springConfig = { stiffness: 150, damping: 15, mass: 0.1 };
+  const x = useSpring(rawX, springConfig);
+  const y = useSpring(rawY, springConfig);
+
+  const innerX = useTransform(x, (v) => v * 0.35);
+  const innerY = useTransform(y, (v) => v * 0.35);
 
   function onMove(e: MouseEvent<HTMLAnchorElement>) {
+    if (reduced) return;
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    x.set((e.clientX - (rect.left + rect.width / 2)) * strength);
-    y.set((e.clientY - (rect.top + rect.height / 2)) * strength);
+    rawX.set((e.clientX - (rect.left + rect.width / 2)) * strength);
+    rawY.set((e.clientY - (rect.top + rect.height / 2)) * strength);
   }
 
   function onLeave() {
-    x.set(0);
-    y.set(0);
+    rawX.set(0);
+    rawY.set(0);
   }
 
   return (
     <motion.a
       ref={ref}
       href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noreferrer" : undefined}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={{ x: sx, y: sy }}
+      style={{ x, y }}
       className={className}
     >
-      {children}
+      <motion.span
+        style={{ x: innerX, y: innerY }}
+        className="inline-flex items-center gap-3"
+      >
+        {children}
+      </motion.span>
     </motion.a>
   );
 }

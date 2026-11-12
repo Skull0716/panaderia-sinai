@@ -1,161 +1,213 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type MouseEvent } from "react";
 import {
   motion,
+  useMotionValue,
+  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
 } from "motion/react";
 import Image from "next/image";
-import { ArrowUpRight, ArrowDown } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
-import { PAINTING_URL } from "@/lib/data";
+import { PAINTING_URL, TELEFONO } from "@/lib/data";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  // Paralaje + zoom suave de la pintura
+  // Paralaje y escala suave de la obra al hacer scroll
   const imgY = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, 90]),
-    { stiffness: 60, damping: 20, mass: 0.6 },
+    useTransform(scrollYProgress, [0, 1], [0, 72]),
+    { stiffness: 65, damping: 22, mass: 0.6 },
   );
   const imgScale = useSpring(
-    useTransform(scrollYProgress, [0, 1], [1, 1.1]),
-    { stiffness: 60, damping: 20, mass: 0.6 },
+    useTransform(scrollYProgress, [0, 1], [1.02, 1.12]),
+    { stiffness: 65, damping: 22, mass: 0.6 },
   );
 
-  // El texto se aleja y desvanece al hacer scroll
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  // Inclinación física 3D sutil al mover el puntero sobre el cuadro
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const rotateX = useSpring(tiltX, { stiffness: 140, damping: 18, mass: 0.4 });
+  const rotateY = useSpring(tiltY, { stiffness: 140, damping: 18, mass: 0.4 });
+
+  function handleFrameMove(e: MouseEvent<HTMLDivElement>) {
+    if (reduced) return;
+    const el = frameRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    tiltX.set(-ny * 5);
+    tiltY.set(nx * 5);
+  }
+
+  function handleFrameLeave() {
+    tiltX.set(0);
+    tiltY.set(0);
+  }
 
   return (
     <section ref={ref} id="inicio" className="relative overflow-hidden">
-      {/* Iluminación ambiental cálida detrás de la pintura */}
+      {/* Resplandor ambiental cálido de horno detrás de la composición */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute left-1/2 top-1/3 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 animate-breathe rounded-full bg-gold/10 blur-3xl" />
-        <div className="absolute bottom-[8%] right-[10%] h-72 w-72 animate-breathe rounded-full bg-ember/15 blur-3xl [animation-delay:-3.5s]" />
+        <div className="absolute right-[8%] top-[18%] h-[480px] w-[480px] animate-breathe rounded-full bg-gold/15 blur-[130px]" />
+        <div className="absolute bottom-[10%] left-[12%] h-[360px] w-[360px] animate-breathe rounded-full bg-ember/15 blur-[120px] [animation-delay:-4s]" />
       </div>
 
-      <div className="shell relative grid min-h-screen items-center gap-16 pb-28 pt-32 xl:grid-cols-[1.05fr_0.95fr] xl:gap-20 xl:pb-24">
-        {/* ---------- Columna de texto ---------- */}
-        <motion.div style={{ y: textY, opacity: textOpacity }}>
-          <motion.h1
-            initial={{ opacity: 0, y: 28 }}
+      <div className="shell relative grid min-h-screen items-center gap-14 pb-24 pt-28 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 xl:gap-24 xl:pb-24">
+        {/* ---------- Columna Editorial ---------- */}
+        <div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            className="mt-8 font-display text-5xl font-normal leading-[0.92] tracking-tight text-ivory md:text-8xl"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-3 border-b border-gold/35 pb-2"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-gold">
+              Obrador Tradicional · Más de 25 años
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.12 }}
+            className="mt-7 font-display text-5xl font-normal leading-[0.94] tracking-[-0.025em] text-ivory sm:text-6xl md:text-7xl xl:text-[5.4rem]"
           >
             Panadería
-            <span className="block bg-gradient-to-b from-ivory via-ivory to-ivory/40 bg-clip-text text-transparent">
-              Sinaí
-            </span>
+            <span className="mt-1 block text-gold">Sinaí</span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
-            className="mt-8 max-w-md text-lg leading-relaxed text-ivory/65"
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
+            className="mt-8 max-w-lg text-base leading-relaxed text-ivory/75 sm:text-lg"
           >
-            Horno tradicional oaxaqueño. Veinticinco años amasando de
-            madrugada lo que el fuego y la paciencia deciden. Sin vitrina,
-            sin desperdicio: sólo lo que se encarga.
+            El pan no tiene prisa. Veinticinco años amasando de madrugada lo que
+            el fuego y la paciencia deciden. Concha, pan de manteca, pan de
+            yema, amarillo, bolillo y resobado; horneados exclusivamente bajo
+            pedido para salir del horno a tu mesa.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.38 }}
             className="mt-10 flex flex-wrap items-center gap-6"
           >
             <MagneticButton
               href="#encargo"
-              className="group inline-flex items-center gap-3 border border-gold/40 bg-gold/10 px-7 py-4 text-sm uppercase tracking-[0.2em] text-ivory backdrop-blur-sm transition-colors duration-300 hover:bg-gold/20"
+              className="btn-primary group"
             >
-              Encargar pan
-              <ArrowUpRight className="h-4 w-4 text-gold transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span>Hacer un pedido</span>
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </MagneticButton>
 
             <a
               href="#oficio"
-              className="group inline-flex items-center gap-3 text-sm text-ivory/60 transition-colors duration-300 hover:text-ivory"
+              className="group inline-flex items-center gap-3 py-2 text-xs font-medium uppercase tracking-[0.22em] text-ivory/70 transition-colors duration-300 hover:text-gold"
             >
-              Ver los panes
-              <span className="h-px w-8 bg-ivory/30 transition-all duration-500 group-hover:w-14 group-hover:bg-gold" />
+              <span>Ver repertorio de panes</span>
+              <span className="h-px w-8 bg-ivory/35 transition-all duration-500 ease-[var(--flight-ease)] group-hover:w-14 group-hover:bg-gold" />
             </a>
           </motion.div>
-        </motion.div>
 
-        {/* ---------- Columna de la pintura de Octavio Ocampo ---------- */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
-          className="relative mx-auto w-full max-w-md xl:max-w-none"
-        >
-          <div className="relative aspect-[3/4] overflow-hidden border border-ivory/10 bg-card">
-            <motion.div
-              style={{ y: imgY, scale: imgScale }}
-              className="absolute inset-0"
-            >
-              <Image
-                src={PAINTING_URL}
-                alt="El Pan de Muerto (1991), óleo de Octavio Ocampo"
-                fill
-                priority
-                sizes="(min-width: 1024px) 44vw, 90vw"
-                className="object-cover"
-              />
-            </motion.div>
-
-            {/* Viñeta que funde la obra con el fondo */}
-            <div className="vignette absolute inset-0" />
-            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5" />
-
-            {/* Biseles finos de esquina */}
-            <span className="absolute left-3 top-3 h-6 w-6 border-l border-t border-ivory/25" />
-            <span className="absolute right-3 top-3 h-6 w-6 border-r border-t border-ivory/25" />
-            <span className="absolute bottom-3 left-3 h-6 w-6 border-b border-l border-ivory/25" />
-            <span className="absolute bottom-3 right-3 h-6 w-6 border-b border-r border-ivory/25" />
-          </div>
-
-          {/* Tarjeta flotante de metadatos, tipo museo */}
-          <motion.figcaption
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.9 }}
-            className="absolute -bottom-8 -left-4 max-w-[280px] border border-ivory/10 bg-card/90 p-5 backdrop-blur-md md:-left-10"
+          {/* Ficha rápida de oficio */}
+          <motion.dl
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.55 }}
+            className="mt-14 grid grid-cols-3 gap-6 border-t border-ivory/10 pt-7 max-w-lg"
           >
-            <p className="text-[11px] uppercase tracking-[0.25em] text-ivory/40">
-              Óleo · 1991
-            </p>
-            <p className="mt-2 font-display text-xl leading-snug text-ivory">
-              “El Pan de Muerto”
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-ivory/60">
-              Octavio Ocampo · Emblema del Obrador Sinaí
-            </p>
-          </motion.figcaption>
-        </motion.div>
-      </div>
+            <div>
+              <dt className="text-[10px] uppercase tracking-[0.22em] text-ivory/45">
+                Tradición
+              </dt>
+              <dd className="mt-1 font-display text-lg text-ivory sm:text-xl">
+                Desde 2001
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[10px] uppercase tracking-[0.22em] text-ivory/45">
+                Modalidad
+              </dt>
+              <dd className="mt-1 font-display text-lg text-ivory sm:text-xl">
+                Bajo pedido
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[10px] uppercase tracking-[0.22em] text-ivory/45">
+                Contacto directo
+              </dt>
+              <dd className="mt-1 font-display text-lg text-gold sm:text-xl">
+                {TELEFONO}
+              </dd>
+            </div>
+          </motion.dl>
+        </div>
 
-      {/* Indicador de scroll */}
-      <div className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-ivory/40">
-          Desliza
-        </span>
-        <motion.span
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        {/* ---------- Columna de la Obra de Octavio Ocampo ---------- */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          style={{ perspective: 1200 }}
+          className="relative mx-auto w-full max-w-md lg:max-w-lg"
         >
-          <ArrowDown className="h-4 w-4 text-ivory/40" />
-        </motion.span>
+          <motion.figure
+            ref={frameRef}
+            onMouseMove={handleFrameMove}
+            onMouseLeave={handleFrameLeave}
+            style={{ rotateX, rotateY }}
+            className="painting-frame relative border border-ivory/15 bg-card p-3 sm:p-4 transition-colors duration-500"
+          >
+            <div className="relative aspect-[3/4] overflow-hidden border border-ivory/10 bg-[#14110f]">
+              <motion.div
+                style={{ y: imgY, scale: imgScale }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={PAINTING_URL}
+                  alt="El Pan de Muerto (1991), óleo metamórfico de Octavio Ocampo — Emblema de Panadería Sinaí"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 42vw, 92vw"
+                  className="object-cover"
+                />
+              </motion.div>
+
+              {/* Viñeta sutil que integra el óleo con el marco */}
+              <div className="vignette pointer-events-none absolute inset-0" />
+            </div>
+
+            {/* Cédula museográfica integrada al pie del marco */}
+            <figcaption className="mt-3.5 flex items-baseline justify-between gap-4 border-t border-ivory/10 pt-3 px-1">
+              <div>
+                <p className="font-display text-sm tracking-wide text-ivory sm:text-base">
+                  “El Pan de Muerto” <span className="text-ivory/50">(1991)</span>
+                </p>
+                <p className="mt-0.5 text-xs text-ivory/55">
+                  Óleo de Octavio Ocampo · Emblema de Panadería Sinaí
+                </p>
+              </div>
+              <span className="shrink-0 text-[10px] uppercase tracking-[0.22em] text-gold">
+                Arte Metamórfico
+              </span>
+            </figcaption>
+          </motion.figure>
+        </motion.div>
       </div>
     </section>
   );

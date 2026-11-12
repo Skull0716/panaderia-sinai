@@ -3,30 +3,53 @@
 @tailwind utilities;
 
 /* =========================================================================
-   PANADERÍA SINAÍ — Sistema de diseño
+   PANADERÍA SINAÍ — Sistema de diseño y física de movimiento
    Paleta extraída de “El Pan de Muerto” (Octavio Ocampo, 1991).
-   Tokens en tripletas RGB (para que Tailwind pueda aplicar opacidad).
-   Modo claro por defecto; `html.dark` conserva la paleta original.
+   Soporta Modo Oscuro (Horno de Noche) y Modo Claro (Papel de Estraza).
    ========================================================================= */
 
 :root {
-  /* Modo claro (por defecto) — harina, papel de estraza y carbón */
-  --bg-primary: 248 243 235; /* #f8f3eb */
-  --bg-surface: 240 233 221; /* #f0e9dd */
-  --bg-card: 252 249 244; /* #fcf9f4 */
-  --text-primary: 23 20 16; /* #171410 */
-  --accent-gold: 166 110 40; /* #a66e28 */
-  --accent-ember: 138 54 34; /* #8a3622 */
+  /* Curvas físicas de resorte (Ubernatural / Motionframe linear() 40 puntos) */
+  --micro-tint: 0.18s;
+  --micro-tint-ease: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --spring: 0.81s;
+  --spring-ease: linear(
+    0 0%, 0.02 2.5%, 0.072 5%, 0.144 7.5%, 0.227 10%, 0.316 12.5%, 0.406 15%,
+    0.492 17.5%, 0.573 20%, 0.647 22.5%, 0.713 25%, 0.77 27.5%, 0.82 30%,
+    0.863 32.5%, 0.898 35%, 0.927 37.5%, 0.951 40%, 0.969 42.5%, 0.984 45%,
+    0.995 47.5%, 1.003 50%, 1.008 52.5%, 1.012 55%, 1.014 57.5%, 1.015 60%,
+    1.015 62.5%, 1.015 65%, 1.014 67.5%, 1.013 70%, 1.011 72.5%, 1.01 75%,
+    1.009 77.5%, 1.007 80%, 1.006 82.5%, 1.005 85%, 1.004 87.5%, 1.003 90%,
+    1.003 92.5%, 1.002 95%, 1.001 97.5%, 1 100%
+  );
+  --flight: 0.65s;
+  --flight-ease: linear(
+    0 0%, 0.196 2.5%, 0.379 5%, 0.543 7.5%, 0.686 10%, 0.806 12.5%, 0.903 15%,
+    0.98 17.5%, 1.036 20%, 1.076 22.5%, 1.102 25%, 1.116 27.5%, 1.12 30%,
+    1.118 32.5%, 1.11 35%, 1.099 37.5%, 1.086 40%, 1.073 42.5%, 1.059 45%,
+    1.046 47.5%, 1.035 50%, 1.024 52.5%, 1.016 55%, 1.009 57.5%, 1.003 60%,
+    0.999 62.5%, 0.996 65%, 0.994 67.5%, 0.992 70%, 0.992 72.5%, 0.992 75%,
+    0.992 77.5%, 0.993 80%, 0.994 82.5%, 0.995 85%, 0.996 87.5%, 0.997 90%,
+    0.997 92.5%, 0.998 95%, 0.999 97.5%, 1 100%
+  );
+
+  /* Modo Claro — Harina de trigo, papel de estraza y tinta de nogal */
+  --bg-primary: 245 239 228; /* #f5efe4 */
+  --bg-surface: 237 229 214; /* #ede5d6 */
+  --bg-card: 250 246 239; /* #faf6ef */
+  --text-primary: 26 21 17; /* #1a1511 */
+  --accent-gold: 158 98 28; /* #9e621c */
+  --accent-ember: 142 50 30; /* #8e321e */
 }
 
 :root[data-theme="dark"] {
-  /* Modo oscuro — negro carbón / horno apagado */
-  --bg-primary: 10 9 8; /* #0a0908 */
-  --bg-surface: 20 18 16; /* #141210 */
-  --bg-card: 28 25 22; /* #1c1916 */
-  --text-primary: 245 239 230; /* #f5efe6 */
-  --accent-gold: 201 138 62; /* #c98a3e */
-  --accent-ember: 138 54 34; /* #8a3622 */
+  /* Modo Oscuro — Carbón de encino, sombra de tahona y corteza dorada */
+  --bg-primary: 12 10 9; /* #0c0a09 */
+  --bg-surface: 20 17 15; /* #14110f */
+  --bg-card: 27 23 20; /* #1b1714 */
+  --text-primary: 243 236 225; /* #f3ece1 */
+  --accent-gold: 206 144 68; /* #ce9044 */
+  --accent-ember: 168 68 44; /* #a8442c */
 }
 
 @layer base {
@@ -39,9 +62,11 @@
     color: rgb(var(--text-primary));
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    transition:
+      background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* Los anclajes respetan la altura de la barra fija */
   [id] {
     scroll-margin-top: 6rem;
   }
@@ -52,7 +77,7 @@
   }
 
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
     background: rgb(var(--bg-primary));
@@ -60,60 +85,91 @@
   ::-webkit-scrollbar-thumb {
     background: rgb(var(--text-primary) / 0.18);
     border-radius: 999px;
-    border: 2px solid rgb(var(--bg-primary));
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--text-primary) / 0.3);
+    background: rgb(var(--text-primary) / 0.32);
   }
 }
 
 @layer components {
-  /* Contenedor a ancho completo, con márgenes laterales generosos */
+  /* Contenedor editorial con márgenes amplios */
   .shell {
-    @apply mx-auto w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20;
+    @apply mx-auto max-w-[90rem] w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20;
   }
 
-  /* Etiqueta de sección (dorado, espaciado amplio) */
+  /* Etiqueta de sección sobria */
   .eyebrow {
-    @apply text-[11px] font-medium uppercase tracking-[0.32em] text-gold;
+    @apply text-[11px] font-medium uppercase tracking-[0.28em] text-gold;
   }
 
-  /* Botón primario — calidez de yema, sin celestes ni morados */
+  /* Botón primario con resorte físico */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-3 bg-gold px-8 py-4 text-sm font-medium uppercase tracking-[0.18em] text-coal transition-colors duration-300 hover:bg-ivory;
+    @apply inline-flex items-center justify-center gap-3 bg-gold px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-coal transition-all;
+    transition-duration: var(--flight);
+    transition-timing-function: var(--flight-ease);
+  }
+  .btn-primary:hover {
+    @apply bg-ivory text-coal -translate-y-0.5;
+  }
+  .btn-primary:active {
+    @apply scale-[0.98];
   }
 
   /* Controles +/− del selector de encargo */
   .stepper-btn {
-    @apply flex h-8 w-8 items-center justify-center border border-ivory/15 text-ivory/70 transition-colors duration-200 hover:border-gold/50 hover:text-gold disabled:opacity-30 disabled:hover:border-ivory/15 disabled:hover:text-ivory/70;
+    @apply flex h-9 w-9 items-center justify-center border border-ivory/15 text-ivory/75 transition-all hover:border-gold hover:bg-gold/10 hover:text-gold active:scale-90 disabled:opacity-25 disabled:pointer-events-none;
+    transition-duration: var(--micro-tint);
+    transition-timing-function: var(--micro-tint-ease);
   }
 
-  /* Viñeta que funde la pintura con el fondo del tema activo */
+  /* Tratamiento de la pintura: sombra interna de galería en claro, viñeta profunda en oscuro */
+  .painting-frame {
+    box-shadow:
+      inset 0 0 48px rgba(12, 10, 9, 0.35),
+      0 28px 70px -20px rgba(12, 10, 9, 0.35);
+  }
+  :root[data-theme="dark"] .painting-frame {
+    box-shadow:
+      inset 0 0 68px rgba(12, 10, 9, 0.78),
+      0 36px 90px -24px rgba(0, 0, 0, 0.85);
+  }
+
   .vignette {
     background: radial-gradient(
       ellipse at center,
-      transparent 38%,
-      rgb(var(--bg-primary) / 0.42) 70%,
-      rgb(var(--bg-primary) / 0.9) 100%
+      transparent 55%,
+      rgba(12, 10, 9, 0.28) 85%,
+      rgba(12, 10, 9, 0.62) 100%
+    );
+  }
+  :root[data-theme="dark"] .vignette {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 42%,
+      rgb(var(--bg-primary) / 0.45) 75%,
+      rgb(var(--bg-primary) / 0.92) 100%
     );
   }
 
-  /* Accesibilidad: respeta la preferencia de movimiento reducido */
   @media (prefers-reduced-motion: reduce) {
-    .animate-breathe,
-    .animate-flicker {
-      animation: none;
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 
-  /* Grano de película (monocromo) para textura cinematográfica */
+  /* Grano procedural SVG sutil */
   .grain {
     position: fixed;
     inset: 0;
     z-index: 40;
     pointer-events: none;
-    opacity: 0.05;
+    opacity: 0.038;
     mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }

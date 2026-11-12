@@ -72,17 +72,22 @@ export default function Manifesto() {
 
       {/* Principios del oficio */}
       <div className="shell mt-20 md:mt-28">
-        <div className="grid gap-px overflow-hidden border border-ivory/10 bg-ivory/10 md:grid-cols-3">
+        <div className="grid gap-px overflow-hidden border border-ivory/15 bg-ivory/15 md:grid-cols-3">
           {principios.map((p, i) => (
             <Reveal key={p.titulo} delay={i * 0.08} className="bg-surface">
-              <div className="h-full p-8 md:p-10">
-                <span className="font-display text-4xl text-ivory/20">
-                  {p.numeral}
-                </span>
-                <h3 className="mt-6 font-display text-2xl font-normal text-gold">
+              <div className="group h-full p-8 transition-colors duration-300 hover:bg-card/70 md:p-10">
+                <div className="flex items-center justify-between">
+                  <span className="font-display text-3xl text-gold/50 transition-colors duration-300 group-hover:text-gold">
+                    {p.numeral}
+                  </span>
+                  <span className="text-[11px] uppercase tracking-[0.22em] text-ivory/30">
+                    Oficio 0{i + 1}
+                  </span>
+                </div>
+                <h3 className="mt-8 font-display text-2xl font-normal text-ivory transition-colors duration-300 group-hover:text-gold md:text-3xl">
                   {p.titulo}
                 </h3>
-                <p className="mt-3 leading-relaxed text-ivory/60">
+                <p className="mt-3 leading-relaxed text-ivory/65">
                   {p.texto}
                 </p>
               </div>
