@@ -12,16 +12,13 @@ export default function Mayoreo() {
       <div className="shell grid items-center gap-12 lg:grid-cols-[1fr_auto] lg:gap-20">
         <div>
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.22em] text-gold/80">
-              Pedidos especiales y eventos
-            </p>
-            <h2 className="mt-3 font-display text-3xl font-normal leading-tight tracking-tight text-ivory md:text-5xl">
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight text-ivory md:text-5xl">
               Mayoreo
             </h2>
             <p className="mt-6 max-w-xl leading-relaxed text-ivory/65">
-              ¿Fiesta, mayordomía, velorio, cafetería o reventa? A partir de 100
-              piezas el precio es especial. Horneamos tu pedido completo de
-              madrugada, con la misma masa y el mismo fuego.
+              ¿Fiesta, mayordomía, compromiso o reventa? A partir de 100
+              piezas el precio es especial. Horneamos tu pedido completo para
+              que lo recibas recién hecho.
             </p>
           </Reveal>
           <Reveal delay={0.1}>

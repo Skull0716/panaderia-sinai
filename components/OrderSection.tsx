@@ -83,14 +83,13 @@ export default function OrderSection() {
         {/* ---------- Columna de contexto y contacto ---------- */}
         <div className="lg:sticky lg:top-28 lg:self-start">
           <Reveal>
-            <p className="eyebrow">Pedidos directos</p>
-            <h2 className="mt-5 font-display text-3xl font-normal leading-tight tracking-tight text-ivory sm:text-4xl md:text-5xl">
-              Encarga hoy. Horneamos de madrugada.
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight text-ivory sm:text-4xl md:text-5xl">
+              Haz tu pedido
             </h2>
             <p className="mt-6 max-w-md text-base leading-relaxed text-ivory/65">
-              Cero vitrina y cero desperdicio. Arma tu selección aquí al lado y
-              envíala directo a nuestro WhatsApp; o llámanos para encargos
-              especiales.
+              Trabajamos todos los días excepto los miércoles. Arma tu pedido
+              aquí al lado y envíalo directo a nuestro WhatsApp, o llámanos
+              para apartar tu pan.
             </p>
           </Reveal>
 

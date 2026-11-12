@@ -162,13 +162,12 @@ export default function PanesGrid() {
     <section id="oficio" className="relative py-24 md:py-36">
       <div className="shell">
         <Reveal>
-          <p className="eyebrow">Repertorio del obrador</p>
-          <h2 className="mt-5 max-w-2xl font-display text-3xl font-normal tracking-tight text-ivory sm:text-4xl md:text-5xl">
-            De oficio, de yema y de temporada.
+          <h2 className="max-w-2xl font-display text-3xl font-normal tracking-tight text-ivory sm:text-4xl md:text-5xl">
+            Nuestros panes
           </h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ivory/65">
             Todo nuestro pan se elabora bajo pedido para salir fresco del horno.
-            Pasa el cursor o toca cualquier pieza para conocer sus ingredientes.
+            Toca cualquier pieza para conocer su descripción e ingredientes.
           </p>
         </Reveal>
 

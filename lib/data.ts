@@ -13,10 +13,17 @@ export type Pan = {
   temporada?: string;
 };
 
-/* -------- Contacto -------- */
+/* -------- Contacto y Ubicación -------- */
 export const TELEFONO = "951 190 0287";
 export const TELEFONO_LINK = "tel:+529511900287";
 export const WHATSAPP_NUMERO = "529511900287";
+export const DIRECCION =
+  "Galeana 309, Barrio de Arriba, 71510 Ocotlán de Morelos, Oax.";
+export const HORARIO = "Jueves a Martes · Miércoles cerrado";
+export const MAPS_LINK =
+  "https://www.google.com/maps/search/?api=1&query=Galeana+309,+Barrio+de+Arriba,+71510+Ocotlan+de+Morelos,+Oax.";
+export const MAPS_EMBED =
+  "https://maps.google.com/maps?q=Galeana%20309,%20Barrio%20de%20Arriba,%2071510%20Ocotl%C3%A1n%20de%20Morelos,%20Oax.&t=&z=16&ie=UTF8&iwloc=&output=embed";
 
 /* -------- La obra ancla de la marca -------- */
 export const PAINTING_URL =
@@ -67,22 +74,22 @@ export const panes: Pan[] = [
     id: "pan-amarillo",
     nombre: "Pan Amarillo",
     descripcion:
-      "Masa madre rústica horneada a la cazuela, con ese color de brasa que le presta el azafrán del oficio.",
+      "Masa suave y tradicional con su característico color dorado, ideal para acompañar el chocolate caliente o el café.",
     ingredientes: [
-      "Masa madre",
       "Harina de trigo",
-      "Azúcar",
+      "Color amarillo tradicional",
+      "Levadura",
       "Manteca",
-      "Sal de mar",
+      "Sal",
     ],
     precio: 4,
     categoria: "oficio",
   },
   {
     id: "bolillo",
-    nombre: "Bolillo de Horno",
+    nombre: "Bolillo",
     descripcion:
-      "Corteza crocante y dorada, centro elástico. El compañero de toda mesa oaxaqueña, horneado a leña.",
+      "Corteza crocante y dorada con centro suave. El compañero diario de toda mesa oaxaqueña, recién salido del horno.",
     ingredientes: ["Harina de trigo", "Agua", "Levadura", "Sal", "Manteca"],
     precio: 4,
     categoria: "oficio",
@@ -91,8 +98,17 @@ export const panes: Pan[] = [
     id: "resobado",
     nombre: "Resobado Tradicional",
     descripcion:
-      "Capas hojaldradas con manteca y azúcar tostada. Se deshoja en la boca como una hoja de otoño.",
-    ingredientes: ["Harina de trigo", "Manteca", "Azúcar tostada", "Sal"],
+      "Capas suaves con manteca y azúcar. Pan tradicional que se deshoja con suavidad en cada bocado.",
+    ingredientes: ["Harina de trigo", "Manteca", "Azúcar", "Sal"],
+    precio: 4,
+    categoria: "oficio",
+  },
+  {
+    id: "reganada",
+    nombre: "Regañada",
+    descripcion:
+      "Pasta hojaldrada, doradita y crujiente espolvoreada con azúcar. Un clásico oaxaqueño para el café o el chocolate.",
+    ingredientes: ["Harina de trigo", "Manteca", "Azúcar", "Sal"],
     precio: 4,
     categoria: "oficio",
   },

@@ -11,6 +11,7 @@ const links = [
   { href: "#manifiesto", label: "Historia" },
   { href: "#encargo", label: "Encargar" },
   { href: "#mayoreo", label: "Mayoreo" },
+  { href: "#ubicacion", label: "Ubicación" },
 ];
 
 export default function Nav() {
@@ -35,13 +36,10 @@ export default function Nav() {
       <div className="shell flex h-16 items-center justify-between md:h-20">
         <a
           href="#inicio"
-          className="group flex items-baseline gap-3"
+          className="group flex items-baseline gap-2"
         >
-          <span className="font-display text-lg tracking-[0.26em] text-ivory transition-colors group-hover:text-gold">
-            SINAÍ
-          </span>
-          <span className="hidden text-[10px] uppercase tracking-[0.24em] text-ivory/40 sm:inline-block">
-            Est. 2001 · Oaxaca
+          <span className="font-display text-lg tracking-[0.14em] text-ivory transition-colors group-hover:text-gold sm:text-xl">
+            Panadería <span className="text-gold">Sinaí</span>
           </span>
         </a>
 

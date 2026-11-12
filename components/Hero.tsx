@@ -67,23 +67,11 @@ export default function Hero() {
       <div className="shell relative grid min-h-screen items-center gap-14 pb-24 pt-28 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 xl:gap-24 xl:pb-24">
         {/* ---------- Columna Editorial ---------- */}
         <div>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex items-center gap-3 border-b border-gold/35 pb-2"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-gold">
-              Obrador Tradicional · Más de 25 años
-            </span>
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.12 }}
-            className="mt-7 font-display text-5xl font-normal leading-[0.94] tracking-[-0.025em] text-ivory sm:text-6xl md:text-7xl xl:text-[5.4rem]"
+            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-5xl font-normal leading-[0.94] tracking-[-0.025em] text-ivory sm:text-6xl md:text-7xl xl:text-[5.4rem]"
           >
             Panadería
             <span className="mt-1 block text-gold">Sinaí</span>
@@ -92,19 +80,18 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
             className="mt-8 max-w-lg text-base leading-relaxed text-ivory/75 sm:text-lg"
           >
-            El pan no tiene prisa. Veinticinco años amasando de madrugada lo que
-            el fuego y la paciencia deciden. Concha, pan de manteca, pan de
-            yema, amarillo, bolillo y resobado; horneados exclusivamente bajo
-            pedido para salir del horno a tu mesa.
+            Más de 25 años horneando pan tradicional en Ocotlán de Morelos.
+            Concha, pan de manteca, pan de yema, amarillo, bolillo, resobado y
+            regañadas; hechos bajo pedido para salir recién horneados a tu mesa.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.38 }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.28 }}
             className="mt-10 flex flex-wrap items-center gap-6"
           >
             <MagneticButton
@@ -119,39 +106,39 @@ export default function Hero() {
               href="#oficio"
               className="group inline-flex items-center gap-3 py-2 text-xs font-medium uppercase tracking-[0.22em] text-ivory/70 transition-colors duration-300 hover:text-gold"
             >
-              <span>Ver repertorio de panes</span>
+              <span>Ver nuestros panes</span>
               <span className="h-px w-8 bg-ivory/35 transition-all duration-500 ease-[var(--flight-ease)] group-hover:w-14 group-hover:bg-gold" />
             </a>
           </motion.div>
 
-          {/* Ficha rápida de oficio */}
+          {/* Datos rápidos reales */}
           <motion.dl
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.55 }}
-            className="mt-14 grid grid-cols-3 gap-6 border-t border-ivory/10 pt-7 max-w-lg"
+            transition={{ duration: 1, delay: 0.45 }}
+            className="mt-14 grid grid-cols-1 gap-5 border-t border-ivory/10 pt-7 sm:grid-cols-3 sm:gap-6 max-w-lg"
           >
             <div>
               <dt className="text-[10px] uppercase tracking-[0.22em] text-ivory/45">
-                Tradición
+                Ubicación
               </dt>
-              <dd className="mt-1 font-display text-lg text-ivory sm:text-xl">
-                Desde 2001
+              <dd className="mt-1 font-display text-base text-ivory sm:text-lg">
+                Ocotlán de Morelos
               </dd>
             </div>
             <div>
               <dt className="text-[10px] uppercase tracking-[0.22em] text-ivory/45">
-                Modalidad
+                Horario
               </dt>
-              <dd className="mt-1 font-display text-lg text-ivory sm:text-xl">
-                Bajo pedido
+              <dd className="mt-1 font-display text-base text-ivory sm:text-lg">
+                Jue a Mar <span className="text-xs text-ivory/50">(Mié cerrado)</span>
               </dd>
             </div>
             <div>
               <dt className="text-[10px] uppercase tracking-[0.22em] text-ivory/45">
-                Contacto directo
+                Pedidos
               </dt>
-              <dd className="mt-1 font-display text-lg text-gold sm:text-xl">
+              <dd className="mt-1 font-display text-base text-gold sm:text-lg">
                 {TELEFONO}
               </dd>
             </div>
@@ -180,7 +167,7 @@ export default function Hero() {
               >
                 <Image
                   src={PAINTING_URL}
-                  alt="El Pan de Muerto (1991), óleo metamórfico de Octavio Ocampo — Emblema de Panadería Sinaí"
+                  alt="El Pan de Muerto, pintura de Octavio Ocampo — Panadería Sinaí"
                   fill
                   priority
                   sizes="(min-width: 1024px) 42vw, 92vw"
@@ -188,22 +175,17 @@ export default function Hero() {
                 />
               </motion.div>
 
-              {/* Viñeta sutil que integra el óleo con el marco */}
+              {/* Viñeta sutil que integra el cuadro con el marco */}
               <div className="vignette pointer-events-none absolute inset-0" />
             </div>
 
-            {/* Cédula museográfica integrada al pie del marco */}
+            {/* Pie del cuadro limpio */}
             <figcaption className="mt-3.5 flex items-baseline justify-between gap-4 border-t border-ivory/10 pt-3 px-1">
-              <div>
-                <p className="font-display text-sm tracking-wide text-ivory sm:text-base">
-                  “El Pan de Muerto” <span className="text-ivory/50">(1991)</span>
-                </p>
-                <p className="mt-0.5 text-xs text-ivory/55">
-                  Óleo de Octavio Ocampo · Emblema de Panadería Sinaí
-                </p>
-              </div>
-              <span className="shrink-0 text-[10px] uppercase tracking-[0.22em] text-gold">
-                Arte Metamórfico
+              <p className="font-display text-sm tracking-wide text-ivory sm:text-base">
+                “El Pan de Muerto”
+              </p>
+              <span className="shrink-0 text-xs text-ivory/55">
+                Octavio Ocampo
               </span>
             </figcaption>
           </motion.figure>
