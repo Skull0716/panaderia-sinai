@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Panadería Sinaí — Horno artesanal desde 2001 · Oaxaca, México</title>
+<meta name="description" content="Panadería artesanal mexicana y oaxaqueña con más de 25 años de tradición. Horneamos bajo pedido, a fuego lento, sin conservadores. Oaxaca, México.">
+<meta name="theme-color" content="#121110">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   PANADERÍA SINAÍ · Sistema de diseño
+   Dirección de arte basada en "El Pan de Muerto" (1991),
+   Octavio Ocampo — harina, carbón y memoria compartida.
+   ============================================================ */
+
+:root {
+  /* Paleta metamórfica */
+  --c-fondo:       #121110;
+  --c-superficie:  #1c1a17;
+  --c-tinta:       #ede8df;
+  --c-tinta-mute:  #9c9488;
+  --c-corteza:     #c48b48;
+  --c-horno:       #8c3d26;
+  --c-filete:      rgba(237, 232, 223, 0.08);
+  --c-filete-fuerte: rgba(237, 232, 223, 0.16);
+
+  /* Tipografía */
+  --serif: "Cinzel", "Times New Roman", serif;
+  --sans:  "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+
+  /* Física de muelle — cero sobrecarga de CPU */
+  --spring-ease: linear(
+    0 0%, 0.02 2.5%, 0.072 5%, 0.144 7.5%, 0.227 10%, 0.316 12.5%, 0.406 15%,
+    0.492 17.5%, 0.573 20%, 0.647 22.5%, 0.713 25%, 0.77 27.5%, 0.82 30%,
+    0.863 32.5%, 0.898 35%, 0.927 37.5%, 0.951 40%, 0.969 42.5%, 0.984 45%,
+    0.995 47.5%, 1.003 50%, 1.008 52.5%, 1.012 55%, 1.014 57.5%, 1.015 60%,
+    1.015 62.5%, 1.015 65%, 1.014 67.5%, 1.013 70%, 1.011 72.5%, 1.01 75%,
+    1.009 77.5%, 1.007 80%, 1.006 82.5%, 1.005 85%, 1.004 87.5%, 1.003 90%,
+    1.003 92.5%, 1.002 95%, 1.001 97.5%, 1 100%
+  );
+  --flight-ease: linear(
+    0 0%, 0.196 2.5%, 0.379 5%, 0.543 7.5%, 0.686 10%, 0.806 12.5%, 0.903 15%,
+    0.98 17.5%, 1.036 20%, 1.076 22.5%, 1.102 25%, 1.116 27.5%, 1.12 30%,
+    1.118 32.5%, 1.11 35%, 1.099 37.5%, 1.086 40%, 1.073 42.5%, 1.059 45%,
+    1.046 47.5%, 1.035 50%, 1.024 52.5%, 1.016 55%, 1.009 57.5%, 1.003 60%,
+    0.999 62.5%, 0.996 65%, 0.994 67.5%, 0.992 70%, 0.992 72.5%, 0.992 75%,
+    0.992 77.5%, 0.993 80%, 0.994 82.5%, 0.995 85%, 0.996 87.5%, 0.997 90%,
+    0.997 92.5%, 0.998 95%, 0.999 97.5%, 1 100%
+  );
+
+  --espacio: clamp(1.25rem, 3vw, 3.5rem);
+  --columna: min(1180px, 100% - var(--espacio) * 2);
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--c-tinta);
+  background: var(--c-fondo);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Profundidad cálida de horno (no brillo — solo sombra) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(196, 139, 72, 0.05), transparent 60%),
+    radial-gradient(90% 70% at 50% 110%, rgba(140, 61, 38, 0.06), transparent 60%);
+}
+
+/* ---------- Grano procedural (feTurbulence) ---------- */
+.grano {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: screen;
+}
+
+::selection { background: var(--c-corteza); color: var(--c-fondo); }
+
+a { color: inherit; text-decoration: none; }
+
+img, svg { display: block; max-width: 100%; }
+
+:focus-visible {
+  outline: 1px solid var(--c-corteza);
+  outline-offset: 4px;
+}
+
+/* ---------- Utilidades tipográficas ---------- */
+.etiqueta {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-tinta-mute);
+}
+
+/* ---------- Cabecera (masthead editorial) ---------- */
+.site-head {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid var(--c-filete);
+}
+
+.masthead {
+  width: var(--columna);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-block: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+.masthead-izq,
+.masthead-der {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-tinta-mute);
+}
+
+.masthead-izq { text-align: left; }
+.masthead-der { text-align: right; }
+
+.masthead-der a {
+  transition: color .35s var(--spring-ease);
+}
+.masthead-der a:hover { color: var(--c-corteza); }
+
+.marca {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 2.4vw, 1.6rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--c-tinta);
+  white-space: nowrap;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  z-index: 5;
+  width: var(--columna);
+  margin-inline: auto;
+  padding-block: clamp(4rem, 10vw, 8.5rem) clamp(3.5rem, 8vw, 6rem);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-tinta-mute);
+}
+.hero-kicker::before {
+  content: "";
+  width: clamp(2rem, 5vw, 4.5rem);
+  height: 1px;
+  background: var(--c-corteza);
+}
+
+.hero-titulo {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 7.2vw, 5.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--c-tinta);
+}
+
+.hero-titulo .linea { display: block; }
+.hero-titulo .linea-2 { color: var(--c-tinta-mute); }
+
+.hero-sub {
+  margin-top: clamp(1.5rem, 3vw, 2.4rem);
+  max-width: 34ch;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  line-height: 1.55;
+  color: var(--c-tinta-mute);
+}
+
+.hero-accion {
+  margin-top: clamp(2.2rem, 4vw, 3.2rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 1rem 1.9rem;
+  border: 1px solid var(--c-filete-fuerte);
+  border-radius: 2px;
+  color: var(--c-tinta);
+  background: transparent;
+  cursor: pointer;
+  will-change: transform;
+  transition:
+    color .4s var(--spring-ease),
+    background-color .4s var(--spring-ease),
+    border-color .4s var(--spring-ease);
+}
+
+.btn:hover {
+  color: var(--c-fondo);
+  background: var(--c-tinta);
+  border-color: var(--c-tinta);
+}
+
+.btn--sombra {
+  color: var(--c-fondo);
+  background: var(--c-tinta);
+  border-color: var(--c-tinta);
+}
+.btn--sombra:hover {
+  color: var(--c-tinta);
+  background: transparent;
+  border-color: var(--c-filete-fuerte);
+}
+
+.btn--corteza {
+  color: var(--c-corteza);
+  border-color: rgba(196, 139, 72, 0.4);
+}
+.btn--corteza:hover {
+  color: var(--c-fondo);
+  background: var(--c-corteza);
+  border-color: var(--c-corteza);
+}
+
+.btn .btn-flecha {
+  display: inline-block;
+  transition: transform .5s var(--spring-ease);
+}
+.btn:hover .btn-flecha { transform: translateX(4px); }
+
+/* ---------- Emblema (marco a El Pan de Muerto) ---------- */
+.emblema {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.emblema-sello {
+  width: min(100%, clamp(13rem, 24vw, 21rem));
+  aspect-ratio: 1;
+}
+
+.emblema-anillo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: girar 140s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+.emblema-pie {
+  max-width: 30ch;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--c-tinta-mute);
+  font-style: italic;
+}
+
+/* ---------- Secciones ---------- */
+.seccion {
+  position: relative;
+  z-index: 5;
+  width: var(--columna);
+  margin-inline: auto;
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+  border-top: 1px solid var(--c-filete);
+}
+
+.seccion-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.seccion-num {
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  color: var(--c-corteza);
+  letter-spacing: 0.1em;
+  padding-top: 0.4em;
+}
+
+.seccion-titulo {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 4vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--c-tinta);
+}
+
+.seccion-desc {
+  grid-column: 2;
+  max-width: 52ch;
+  margin-top: 1.1rem;
+  color: var(--c-tinta-mute);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ---------- Repertorio de panes ---------- */
+.repertorio {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.repertorio-bloque + .repertorio-bloque {
+  border-left: 1px solid var(--c-filete);
+  padding-left: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.bloque-titulo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(1.6rem, 3vw, 2.4rem);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--c-filete);
+}
+
+.bloque-titulo h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.2rem, 2.4vw, 1.7rem);
+  letter-spacing: 0.02em;
+  color: var(--c-tinta);
+}
+
+.bloque-titulo .etiqueta { white-space: nowrap; }
+
+.panes { list-style: none; }
+
+.pan {
+  border-bottom: 1px solid var(--c-filete);
+}
+
+.pan-trigger {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.pan-num {
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  color: var(--c-tinta-mute);
+  letter-spacing: 0.1em;
+  min-width: 2ch;
+  transition: color .4s var(--spring-ease);
+}
+
+.pan-nombre {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.35rem, 3vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: var(--c-tinta);
+  transition: color .4s var(--spring-ease);
+}
+
+.pan-tag {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-tinta-mute);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.pan-mas {
+  display: none;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--c-tinta-mute);
+  transition: transform .5s var(--spring-ease), color .4s var(--spring-ease);
+}
+
+.pan-detalle {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    grid-template-rows .55s var(--spring-ease),
+    opacity .45s var(--spring-ease),
+    transform .55s var(--spring-ease);
+}
+
+.pan-detalle-inner { overflow: hidden; }
+
+.pan-perfil {
+  max-width: 52ch;
+  padding: 0.1rem 0 1.4rem 2.6rem;
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--c-tinta-mute);
+}
+
+/* Reveal con muelle amortiguado */
+.pan:hover .pan-num,
+.pan:focus-within .pan-num,
+.pan.abierta .pan-num { color: var(--c-corteza); }
+
+.pan:hover .pan-nombre,
+.pan:focus-within .pan-nombre,
+.pan.abierta .pan-nombre { color: var(--c-corteza); }
+
+.pan:hover .pan-detalle,
+.pan:focus-within .pan-detalle,
+.pan.abierta .pan-detalle {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Manifiesto ---------- */
+.manifiesto-lista {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--c-filete);
+  border: 1px solid var(--c-filete);
+}
+
+.manifiesto-lista li {
+  background: var(--c-fondo);
+  padding: clamp(1.8rem, 4vw, 3rem);
+}
+
+.manifiesto-num {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  line-height: 1;
+  color: var(--c-corteza);
+  display: block;
+  margin-bottom: 1.4rem;
+}
+
+.manifiesto-lista h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  line-height: 1.2;
+  color: var(--c-tinta);
+  margin-bottom: 0.9rem;
+}
+
+.manifiesto-lista p {
+  color: var(--c-tinta-mute);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ---------- Módulo de pedidos ---------- */
+.pedido {
+  border: 1px solid var(--c-filete);
+  background: var(--c-superficie);
+  padding: clamp(2.4rem, 6vw, 5rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.pedido::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-corteza), transparent);
+  opacity: 0.6;
+}
+
+.pedido-titulo {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 4.4vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--c-tinta);
+  max-width: 24ch;
+}
+
+.pedido-mensaje {
+  margin-top: 1.4rem;
+  max-width: 56ch;
+  color: var(--c-tinta-mute);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.pedido-acciones {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pedido-datos {
+  margin-top: clamp(2.2rem, 4vw, 3rem);
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--c-filete);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 3rem;
+  align-items: center;
+}
+
+.pedido-dato { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.pedido-dato .etiqueta { font-size: 0.6rem; }
+
+.pedido-dato .valor {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  color: var(--c-tinta);
+}
+
+.pedido-dato .valor a {
+  transition: color .35s var(--spring-ease);
+}
+.pedido-dato .valor a:hover { color: var(--c-corteza); }
+
+/* ---------- Pie de página ---------- */
+.pie {
+  position: relative;
+  z-index: 5;
+  border-top: 1px solid var(--c-filete);
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.pie-inner {
+  width: var(--columna);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.pie-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.pie-marca {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-tinta);
+}
+
+.pie-col { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.pie-col .etiqueta { font-size: 0.6rem; }
+
+.pie-col p, .pie-col a {
+  font-size: 0.9rem;
+  color: var(--c-tinta-mute);
+  line-height: 1.6;
+}
+.pie-col a:hover { color: var(--c-corteza); }
+
+.pie-line {
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--c-filete);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--c-tinta-mute);
+  text-align: center;
+}
+
+/* ---------- Animación de entrada (scroll) ---------- */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity .9s var(--flight-ease),
+    transform 1s var(--spring-ease);
+  transition-delay: var(--retraso, 0ms);
+}
+html.js [data-reveal].en-vista {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .masthead {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "marca marca"
+      "izq der";
+    row-gap: 0.9rem;
+  }
+  .marca { grid-area: marca; }
+  .masthead-izq { grid-area: izq; }
+  .masthead-der { grid-area: der; }
+
+  .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .emblema { order: -1; }
+  .emblema-sello { width: min(62vw, 15rem); }
+
+  .repertorio { grid-template-columns: 1fr; }
+  .repertorio-bloque + .repertorio-bloque {
+    border-left: none;
+    border-top: 1px solid var(--c-filete);
+    padding-left: 0;
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .manifiesto-lista { grid-template-columns: 1fr; }
+
+  .pie-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+@media (max-width: 560px) {
+  .pan-trigger { grid-template-columns: auto 1fr; }
+  .pan-tag { grid-column: 2; text-align: left; }
+  .pan-perfil { padding-left: 2.6rem; }
+
+  .seccion-head { grid-template-columns: 1fr; gap: 0.4rem; }
+  .seccion-desc { grid-column: 1; }
+
+  .pedido-acciones .btn { width: 100%; }
+}
+
+/* ---------- prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  html.js [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .emblema-anillo { animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Grano procedural estático (SVG inline · feTurbulence) -->
+<svg class="grano" aria-hidden="true" focusable="false">
+  <filter id="grano-ruido">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grano-ruido)"/>
+</svg>
+
+<!-- ============================ CABECERA ============================ -->
+<header class="site-head">
+  <div class="masthead">
+    <span class="masthead-izq">Fundada en 2001 · 25 años de oficio</span>
+    <a class="marca" href="#inicio" aria-label="Panadería Sinaí, inicio">Panadería Sinaí</a>
+    <span class="masthead-der">
+      <a href="https://wa.me/529511900287?text=Hola%20Panader%C3%ADa%20Sina%C3%AD,%20quisiera%20hacer%20un%20pedido%20de%20pan." rel="noopener">WhatsApp</a>
+      <span aria-hidden="true"> · </span>
+      <a href="tel:+529511900287">951 190 0287</a>
+    </span>
+  </div>
+</header>
+
+<main>
+  <!-- ============================ HERO ============================ -->
+  <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+    <div class="hero-grid">
+      <div class="hero-cuerpo">
+        <p class="hero-kicker">Horno artesanal · Oaxaca, México</p>
+        <h1 class="hero-titulo" id="hero-titulo" data-reveal>
+          <span class="linea">El pan no</span>
+          <span class="linea linea-2">tiene prisa.</span>
+        </h1>
+        <p class="hero-sub" data-reveal style="--retraso:120ms">
+          Veinticinco años horneando a fuego lento.
+        </p>
+        <div class="hero-accion" data-reveal style="--retraso:240ms">
+          <a class="btn btn--sombra" data-magnetic href="#pedido">
+            Hacer pedido al obrador
+            <span class="btn-flecha" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="emblema" data-reveal style="--retraso:180ms">
+        <svg class="emblema-sello" viewBox="0 0 320 320" role="img" aria-label="Marco homenaje a El Pan de Muerto de Octavio Ocampo: la harina moldeada como escultura viva">
+          <g class="emblema-anillo">
+            <circle cx="160" cy="160" r="152" fill="none" stroke="rgba(237,232,223,0.14)" stroke-width="1"/>
+            <circle cx="160" cy="160" r="128" fill="none" stroke="rgba(237,232,223,0.07)" stroke-width="1"/>
+            <circle cx="160" cy="160" r="104" fill="none" stroke="rgba(237,232,223,0.07)" stroke-width="1"/>
+            <!-- Huesos del pan de muerto (cruz de la memoria) -->
+            <g fill="rgba(196,139,72,0.16)" stroke="rgba(196,139,72,0.55)" stroke-width="1">
+              <rect x="149" y="46"  width="22" height="72" rx="11"/>
+              <rect x="149" y="202" width="22" height="72" rx="11"/>
+              <rect x="46"  y="149" width="72" height="22" rx="11"/>
+              <rect x="202" y="149" width="72" height="22" rx="11"/>
+            </g>
+            <circle cx="160" cy="160" r="34" fill="rgba(196,139,72,0.20)" stroke="rgba(196,139,72,0.7)" stroke-width="1"/>
+            <circle cx="160" cy="160" r="14" fill="rgba(237,232,223,0.10)" stroke="rgba(237,232,223,0.25)" stroke-width="1"/>
+            <circle cx="160" cy="46"  r="7" fill="rgba(196,139,72,0.45)"/>
+            <circle cx="160" cy="274" r="7" fill="rgba(196,139,72,0.45)"/>
+            <circle cx="46"  cy="160" r="7" fill="rgba(196,139,72,0.45)"/>
+            <circle cx="274" cy="160" r="7" fill="rgba(196,139,72,0.45)"/>
+          </g>
+        </svg>
+        <p class="emblema-pie">
+          Un homenaje a <em>El Pan de Muerto</em> (1991), de Octavio Ocampo — la harina moldeada como escultura viva y memoria compartida.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ REPERTORIO ============================ -->
+  <section class="seccion" id="repertorio" aria-labelledby="repertorio-titulo">
+    <header class="seccion-head" data-reveal>
+      <span class="seccion-num">01</span>
+      <div>
+        <h2 class="seccion-titulo" id="repertorio-titulo">El repertorio de panes</h2>
+        <p class="seccion-desc">
+          Un pliego de oficio, amasado a mano y horneado a fuego lento. Cada pieza se prepara sobre pedido, nunca en serie.
+        </p>
+      </div>
+    </header>
+
+    <div class="repertorio">
+
+      <div class="repertorio-bloque">
+        <div class="bloque-titulo">
+          <h3>Horno diario</h3>
+          <span class="etiqueta">Bajo pedido</span>
+        </div>
+
+        <ul class="panes">
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">01</span>
+              <span class="pan-nombre">Concha</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">Mantequilla tradicional y costra de azúcar crocante; miga esponjosa, el crujido del desayuno.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">02</span>
+              <span class="pan-nombre">Pan de Manteca</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">Amasado tradicional de textura densa y sabor profundo; el pan de fiesta del Valle.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">03</span>
+              <span class="pan-nombre">Pan de Yema</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">Receta clásica oaxaqueña con huevo de rancho y anís; dulzor profundo de horno de leña.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">04</span>
+              <span class="pan-nombre">Pan Amarillo</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">El clásico de cazuela; aroma rústico a piloncillo y manteca, corteza tostada.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">05</span>
+              <span class="pan-nombre">Bolillo de Horno</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">Corteza crujiente, miga elástica; el compañero honesto de la mesa diaria.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">06</span>
+              <span class="pan-nombre">Resobado</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">Capas de masa con manteca y azúcar dorada; hojaldre mestizo de herencia conventual.</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="repertorio-bloque">
+        <div class="bloque-titulo">
+          <h3>Piezas de temporada</h3>
+          <span class="etiqueta">Calendario</span>
+        </div>
+
+        <ul class="panes">
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">01</span>
+              <span class="pan-nombre">Pan de Muerto</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">Con azúcar, ajonjolí o caritas tradicionales; homenaje al arte de la memoria moldeado en harina.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="pan" data-reveal>
+            <button class="pan-trigger" type="button" aria-expanded="false">
+              <span class="pan-num">02</span>
+              <span class="pan-nombre">Rosca de Reyes</span>
+              <span class="pan-tag">Bajo encargo previo</span>
+            </button>
+            <div class="pan-detalle">
+              <div class="pan-detalle-inner">
+                <p class="pan-perfil">Mantequilla, higos y costra tradicional de azúcar; la rueda que cierra y abre el calendario.</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="pedido-mini" data-reveal style="--retraso:120ms">
+          <p class="etiqueta" style="margin-bottom:0.8rem;">Anticipación</p>
+          <p style="color:var(--c-tinta-mute); font-size:0.92rem; line-height:1.7;">
+            Las piezas de temporada requieren reserva con 24 a 48 horas de anticipación, para honrar el tiempo de la masa.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================ MANIFIESTO ============================ -->
+  <section class="seccion" id="manifiesto" aria-labelledby="manifiesto-titulo">
+    <header class="seccion-head" data-reveal>
+      <span class="seccion-num">02</span>
+      <div>
+        <h2 class="seccion-titulo" id="manifiesto-titulo">El manifiesto de 25 años</h2>
+        <p class="seccion-desc">
+          Tres decisiones que no negociamos, horneadas en la misma masa desde 2001.
+        </p>
+      </div>
+    </header>
+
+    <ol class="manifiesto-lista">
+      <li data-reveal>
+        <span class="manifiesto-num">I</span>
+        <h3>Cero producción industrial</h3>
+        <p>Cada pieza se elabora a mano el mismo día de la entrega.</p>
+      </li>
+      <li data-reveal style="--retraso:100ms">
+        <span class="manifiesto-num">II</span>
+        <h3>Sin conservadores</h3>
+        <p>Ingredientes honestos: harina, masa madre, manteca, yemas y tiempo.</p>
+      </li>
+      <li data-reveal style="--retraso:200ms">
+        <span class="manifiesto-num">III</span>
+        <h3>Trabajo bajo pedido</h3>
+        <p>Evitamos el desperdicio. Horneamos únicamente lo que se reserva.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============================ PEDIDOS ============================ -->
+  <section class="seccion" id="pedido" aria-labelledby="pedido-titulo">
+    <div class="pedido" data-reveal>
+      <h2 class="pedido-titulo" id="pedido-titulo">Horneamos bajo pedido</h2>
+      <p class="pedido-mensaje">
+        Para garantizar que tu pan salga fresco del horno a tu mesa. Sin vitrinas atiborradas ni piezas de ayer.
+      </p>
+
+      <div class="pedido-acciones">
+        <a class="btn btn--corteza" data-magnetic
+           href="https://wa.me/529511900287?text=Hola%20Panader%C3%ADa%20Sina%C3%AD,%20quisiera%20hacer%20un%20pedido%20de%20pan."
+           rel="noopener">
+          Pedir por WhatsApp
+          <span class="btn-flecha" aria-hidden="true">→</span>
+        </a>
+        <a class="btn" data-magnetic href="tel:+529511900287">Llamar al obrador</a>
+      </div>
+
+      <div class="pedido-datos">
+        <div class="pedido-dato">
+          <span class="etiqueta">Pedidos</span>
+          <span class="valor"><a href="tel:+529511900287">951 190 0287</a></span>
+        </div>
+        <div class="pedido-dato">
+          <span class="etiqueta">Anticipación</span>
+          <span class="valor">24 – 48 horas</span>
+        </div>
+        <div class="pedido-dato">
+          <span class="etiqueta">Entrega</span>
+          <span class="valor">Oaxaca, México</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ PIE ============================ -->
+<footer class="pie">
+  <div class="pie-inner">
+    <div class="pie-grid">
+      <div class="pie-col">
+        <span class="pie-marca">Panadería Sinaí</span>
+        <p>Horno artesanal desde 2001 · Oaxaca, México.</p>
+      </div>
+      <div class="pie-col">
+        <span class="etiqueta">Contacto</span>
+        <a href="tel:+529511900287">951 190 0287</a>
+        <a href="https://wa.me/529511900287?text=Hola%20Panader%C3%ADa%20Sina%C3%AD,%20quisiera%20hacer%20un%20pedido%20de%20pan." rel="noopener">WhatsApp</a>
+      </div>
+      <div class="pie-col">
+        <span class="etiqueta">Atención a pedidos</span>
+        <p>Lunes a sábado · 8:00 – 18:00</p>
+        <p>Especiales con 24 a 48 hrs de anticipación.</p>
+      </div>
+    </div>
+    <p class="pie-line">Panadería Sinaí · Horno artesanal desde 2001 · Oaxaca, México.</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   Panadería Sinaí · Interacción vanilla (alto rendimiento)
+   ============================================================ */
+(function () {
+  "use strict";
+
+  document.documentElement.classList.replace("no-js", "js");
+
+  var REDUCIDO = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Revelado al hacer scroll ---------- */
+  var revelables = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (entrada) {
+        if (entrada.isIntersecting) {
+          entrada.target.classList.add("en-vista");
+          io.unobserve(entrada.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    revelables.forEach(function (el) { io.observe(el); });
+  } else {
+    revelables.forEach(function (el) { el.classList.add("en-vista"); });
+  }
+
+  /* ---------- Atracción magnética sutil ---------- */
+  if (!REDUCIDO) {
+    var magneticos = document.querySelectorAll("[data-magnetic]");
+
+    magneticos.forEach(function (el) {
+      var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+      var fuerza = 0.16;
+
+      function animar() {
+        cx += (tx - cx) * 0.2;
+        cy += (ty - cy) * 0.2;
+        el.style.transform = "translate3d(" + cx.toFixed(2) + "px, " + cy.toFixed(2) + "px, 0)";
+        if (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05) {
+          raf = requestAnimationFrame(animar);
+        } else {
+          raf = 0;
+        }
+      }
+
+      el.addEventListener("mousemove", function (e) {
+        var r = el.getBoundingClientRect();
+        tx = (e.clientX - r.left - r.width / 2) * fuerza;
+        ty = (e.clientY - r.top - r.height / 2) * fuerza;
+        if (!raf) raf = requestAnimationFrame(animar);
+      });
+
+      el.addEventListener("mouseleave", function () {
+        tx = 0; ty = 0;
+        if (!raf) raf = requestAnimationFrame(animar);
+      });
+    });
+  }
+
+  /* ---------- Revelado de panes (accesible por teclado/tacto) ---------- */
+  var disparadores = document.querySelectorAll(".pan-trigger");
+
+  disparadores.forEach(function (boton) {
+    boton.addEventListener("click", function () {
+      var pan = boton.closest(".pan");
+      var abierta = pan.classList.toggle("abierta");
+      boton.setAttribute("aria-expanded", abierta ? "true" : "false");
+    });
+  });
+})();
+</script>
+</body>
+</html>

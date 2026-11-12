@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================================
+   PANADERÍA SINAÍ — Sistema de diseño
+   Paleta extraída de “El Pan de Muerto” (Octavio Ocampo, 1991).
+   Tokens en tripletas RGB (para que Tailwind pueda aplicar opacidad).
+   Modo claro por defecto; `html.dark` conserva la paleta original.
+   ========================================================================= */
+
+:root {
+  /* Modo claro (por defecto) — harina, papel de estraza y carbón */
+  --bg-primary: 248 243 235; /* #f8f3eb */
+  --bg-surface: 240 233 221; /* #f0e9dd */
+  --bg-card: 252 249 244; /* #fcf9f4 */
+  --text-primary: 23 20 16; /* #171410 */
+  --accent-gold: 166 110 40; /* #a66e28 */
+  --accent-ember: 138 54 34; /* #8a3622 */
+}
+
+:root[data-theme="dark"] {
+  /* Modo oscuro — negro carbón / horno apagado */
+  --bg-primary: 10 9 8; /* #0a0908 */
+  --bg-surface: 20 18 16; /* #141210 */
+  --bg-card: 28 25 22; /* #1c1916 */
+  --text-primary: 245 239 230; /* #f5efe6 */
+  --accent-gold: 201 138 62; /* #c98a3e */
+  --accent-ember: 138 54 34; /* #8a3622 */
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: rgb(var(--bg-primary));
+    color: rgb(var(--text-primary));
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Los anclajes respetan la altura de la barra fija */
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent-gold));
+    color: rgb(var(--bg-primary));
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--bg-primary));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--text-primary) / 0.18);
+    border-radius: 999px;
+    border: 2px solid rgb(var(--bg-primary));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--text-primary) / 0.3);
+  }
+}
+
+@layer components {
+  /* Contenedor a ancho completo, con márgenes laterales generosos */
+  .shell {
+    @apply mx-auto w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20;
+  }
+
+  /* Etiqueta de sección (dorado, espaciado amplio) */
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.32em] text-gold;
+  }
+
+  /* Botón primario — calidez de yema, sin celestes ni morados */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-3 bg-gold px-8 py-4 text-sm font-medium uppercase tracking-[0.18em] text-coal transition-colors duration-300 hover:bg-ivory;
+  }
+
+  /* Controles +/− del selector de encargo */
+  .stepper-btn {
+    @apply flex h-8 w-8 items-center justify-center border border-ivory/15 text-ivory/70 transition-colors duration-200 hover:border-gold/50 hover:text-gold disabled:opacity-30 disabled:hover:border-ivory/15 disabled:hover:text-ivory/70;
+  }
+
+  /* Viñeta que funde la pintura con el fondo del tema activo */
+  .vignette {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 38%,
+      rgb(var(--bg-primary) / 0.42) 70%,
+      rgb(var(--bg-primary) / 0.9) 100%
+    );
+  }
+
+  /* Accesibilidad: respeta la preferencia de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-breathe,
+    .animate-flicker {
+      animation: none;
+    }
+  }
+
+  /* Grano de película (monocromo) para textura cinematográfica */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
